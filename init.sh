@@ -10,6 +10,8 @@ pip2 install shadowsocks
 
 sed -i "s/cleanup/reset/g" /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py
 
+rm -f /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc
+
 exit
 
 #SS_IP="52.194.71.206"
