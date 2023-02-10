@@ -3,18 +3,34 @@
 
 ---
 
+# Quick Start
 
-# awsl
+1. Install. Print these cmds into AWS CloudShell.
+```
+git clone https://gitee.com/miojizzy/auto_ssserver.git
+cd auto_ssserver
+./setup.sh awsl
+./setup.sh st
+```
+2. Use. 
+- `awsl run auto_ss` -> create a server 
+- `awsl desc` -> get instance instanceId and IPv4 
+- connect to ssserver with client
+- `awsl term ` -> stop server with instanceId
+
+# Tools
+
+## awsl
 
 > A simple tool on AWS CloudShell, aka awsl
 
-## install 
+### install 
 
 run `./setup.sh awsl`
 
-## usage(subcmd)
+### usage(subcmd)
 
-### desc
+#### desc
 
 > is abbreviated from describe, to list some information of all instance.
 
@@ -27,7 +43,7 @@ run `./setup.sh awsl`
     - IPv4 (public)
     - SecurityGroup
 
-### run
+#### run
 
 > run instance from a launch-template.
 
@@ -37,7 +53,7 @@ run `./setup.sh awsl`
 - output
     - bulabula... (informations about new instance)
 
-### term
+#### term
 
 > is abbreviated from terminate, to stop and destroy a instance, and stop billing.
 
@@ -47,7 +63,7 @@ run `./setup.sh awsl`
 - output
     - bulabula... (informations about the instance)
 
-### help
+#### help
 
 > can provide all kinds of help except help. :)
     
@@ -55,11 +71,11 @@ run `./setup.sh awsl`
 ---
 
 
-# ssserver
+## ssserver
 
 > to setup shadowsocket server automaticly
 
-## install
+### install
 
 run `./setup.sh st`
 
@@ -69,7 +85,7 @@ run `./setup.sh st`
 If you want to change config of ssserver, you need to modify `src/ssserver/config.py` and setup again. 
 If you don't know how to edit file, you'd better not to do this.
 
-## usage
+### usage
 
 After 'setup st', you can use 'awsl' tool to run instance.
 
