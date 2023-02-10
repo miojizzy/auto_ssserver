@@ -1,0 +1,51 @@
+#!/usr/bin/python
+
+import sys
+import commands
+import json
+
+def describe(vec):
+    data = commands.getoutput("aws ec2 describe-instances")
+
+    data = json.loads(data)
+    fmtstr = '{:20s} {:20s} {:20s} {:40s}'
+    print fmtstr.format("ImageId", "State", "IPv4", "SecurityGroups")
+    for reservation in data["Reservations"]:
+        for instance in reservation["Instances"]:
+            #print instance["InstanceId"],
+            #print instance["State"]["Name"],
+            #print instance["PublicIpAddress"],
+            #print ",".join([ x["GroupName"] for x in instance["SecurityGroups"]])
+            #print json.dumps(instance)
+            print fmtstr.format(instance["InstanceId"], instance["State"]["Name"], instance["PublicIpAddress"], 
+                             ",".join([ x["GroupName"] for x in instance["SecurityGroups"]]))
+
+def run(vec):
+    tp_name = vec[0]
+    data = commands.getoutput("aws ec2 run-instances --launch-template LaunchTemplateName=%s"%(tp_name))
+    print "finish!"
+
+def terminate(vec):
+    ins_id = vec[0]
+    data = commands.getoutput("aws ec2 terminate-instances --instance-ids %s"%(ins_id))
+    print(data)
+
+def help(vec):
+    print "subcmds:", " | ".join(_op_map.keys())
+
+
+_op_map = {
+    "help": help,
+    "run": run,
+    "desc": describe,
+    "term": terminate
+}
+
+_get_op = lambda : sys.argv[1] if len(sys.argv) >= 2 else "help"
+
+
+def main():
+    _op_map[_get_op()](sys.argv[2:])
+
+if __name__ == "__main__":
+    main()
