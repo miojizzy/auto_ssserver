@@ -17,7 +17,7 @@ def describe(vec):
             #print instance["PublicIpAddress"],
             #print ",".join([ x["GroupName"] for x in instance["SecurityGroups"]])
             #print json.dumps(instance)
-            print fmtstr.format(instance["InstanceId"], instance["State"]["Name"], instance["PublicIpAddress"], 
+            print fmtstr.format(instance["InstanceId"], instance["State"]["Name"], instance.get("PublicIpAddress", "NULL"), 
                              ",".join([ x["GroupName"] for x in instance["SecurityGroups"]]))
 
 def run(vec):

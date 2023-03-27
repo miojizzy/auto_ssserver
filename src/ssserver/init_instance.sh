@@ -13,7 +13,7 @@ sed -i "s/cleanup/reset/g" /usr/local/lib/python2.7/dist-packages/shadowsocks/cr
 rm -f /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc
 
 # start
-nohup ssserver -c /etc/shadowsocks.json >/tmp/ssserver.log 2>&1 &
+nohup ssserver -c /etc/shadowsocks.json > /tmp/ssserver.log 2>&1 &
 
 sleep 2
 
