@@ -20,7 +20,9 @@ log "(4/6) create security group ..."
 aws ec2 create-security-group --cli-input-json "`cat conf/sg.json`"
 
 log "(5/6) authorize ingress ..."
-aws ec2 authorize-security-group-ingress --cli-input-json "`cat conf/sgi.json`"
+for ff in `ls conf/sgi`;do
+	aws ec2 authorize-security-group-ingress --cli-input-json "$(cat conf/sgi/${ff})"
+done
 
 log "(6/6) create launch template ..."
 aws ec2 create-launch-template --cli-input-json "`cat conf/lt.json`"
