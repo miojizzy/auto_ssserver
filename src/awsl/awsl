@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 import sys
 import commands
@@ -9,7 +9,7 @@ def describe(vec):
 
     data = json.loads(data)
     fmtstr = '{:20s} {:20s} {:20s} {:40s}'
-    print fmtstr.format("ImageId", "State", "IPv4", "SecurityGroups")
+    print(fmtstr.format("ImageId", "State", "IPv4", "SecurityGroups"))
     for reservation in data["Reservations"]:
         for instance in reservation["Instances"]:
             #print instance["InstanceId"],
@@ -17,13 +17,13 @@ def describe(vec):
             #print instance["PublicIpAddress"],
             #print ",".join([ x["GroupName"] for x in instance["SecurityGroups"]])
             #print json.dumps(instance)
-            print fmtstr.format(instance["InstanceId"], instance["State"]["Name"], instance.get("PublicIpAddress", "NULL"), 
-                             ",".join([ x["GroupName"] for x in instance["SecurityGroups"]]))
+            print(fmtstr.format(instance["InstanceId"], instance["State"]["Name"], instance.get("PublicIpAddress", "NULL"), 
+                             ",".join([ x["GroupName"] for x in instance["SecurityGroups"]])))
 
 def run(vec):
     tp_name = vec[0]
     data = commands.getoutput("aws ec2 run-instances --launch-template LaunchTemplateName=%s"%(tp_name))
-    print "finish!"
+    print("finish!")
 
 def terminate(vec):
     ins_id = vec[0]
@@ -31,7 +31,7 @@ def terminate(vec):
     print(data)
 
 def help(vec):
-    print "subcmds:", " | ".join(_op_map.keys())
+    print("subcmds:", " | ".join(_op_map.keys()))
 
 
 _op_map = {
