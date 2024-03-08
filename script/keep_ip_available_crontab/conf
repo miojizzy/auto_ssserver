@@ -1,0 +1,8 @@
+
+#aws
+launch_template_name="auto_ss"
+loss_max_limit="70"
+
+# nginx
+nginx_conf="/etc/nginx/ss_proxy.conf"
+

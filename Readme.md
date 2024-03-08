@@ -5,7 +5,7 @@
 
 # Quick Start
 
-1. Install. Print these cmds into AWS CloudShell.
+1. Install. Paste these cmds into AWS CloudShell.
 ```
 git clone https://gitee.com/miojizzy/auto_ssserver.git
 cd auto_ssserver
