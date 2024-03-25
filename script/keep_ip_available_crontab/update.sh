@@ -4,7 +4,7 @@ CONF="./conf"
 
 
 function DEBUG_LOG(){
-    date +"[%Y-%m-%d %H:%M:%S] [DEBUG] $*" >> ./log
+    date +"[%Y-%m-%d %H:%M:%S] [DEBUG] $*" >> /dev/null
 }
 function INFO_LOG(){
     date +"[%Y-%m-%d %H:%M:%S] [INFO] $*" >> ./log
@@ -81,11 +81,11 @@ function CheckPingLoss() {
     DEBUG_LOG "loss: $loss"
 }
 
-# param: nginx_conf oldstr newstr
+# param: nginx_conf newip
 function ChangeNginx() {
-    sed -r "s/$2/$3/g" -i $1
+    sed -r 's/^( *server ).*(:2333;)$/\1$2\2/g' -i $1
     nginx -s reload
-    DEBUG_LOG "restart nginx: conf:$1, old:$2, new:$3"
+    DEBUG_LOG "restart nginx: conf:$1, new:$2"
 }
 
 
@@ -98,6 +98,10 @@ function Create() {
         return
     fi
     AllocateInstance $launch_template_name
+
+    GetInstanceInfo
+
+    ChangeNginx $nginx_conf $ip
 
     INFO_LOG "Create VPS"
 }
@@ -126,7 +130,7 @@ function Check() {
     fi
 
     CheckPingLoss $ip
-    [[ loss -lt $loss_max_limit ]] && return
+    [[ $loss -lt $loss_max_limit ]] INFO_LOG "Check Pass: insta:$insta_id, loss:$loss" && return
 
     old_ip=$ip
     GetAddressInfo $insta_id
@@ -136,15 +140,14 @@ function Check() {
     AllocateAddress $insta_id
     new_ip=$ip
 
-    RestartNginx $nginx_conf $old_ip $new_ip
+    ChangeNginx $nginx_conf $new_ip
 
-    INFO_LOG "change ip address: old:$old_ip, new:$new_ip"
+    INFO_LOG "change ip address: loss:$loss, old:$old_ip, new:$new_ip"
 }
 
 
 
 
-INFO_LOG "Start Update" 
 
 alias aws="/usr/local/bin/aws"
 source $CONF
@@ -165,4 +168,3 @@ case $1 in
 esac
 
 
-INFO_LOG "Finish Update" 
