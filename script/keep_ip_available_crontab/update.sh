@@ -83,7 +83,7 @@ function CheckPingLoss() {
 
 # param: nginx_conf newip
 function ChangeNginx() {
-    sed -r 's/^( *server ).*(:2333;)$/\1$2\2/g' -i $1
+    sed -r "s/^( *server ).*(:2333;)$/\1$2\2/g" -i $1
     nginx -s reload
     DEBUG_LOG "restart nginx: conf:$1, new:$2"
 }
@@ -130,7 +130,7 @@ function Check() {
     fi
 
     CheckPingLoss $ip
-    [[ $loss -lt $loss_max_limit ]] INFO_LOG "Check Pass: insta:$insta_id, loss:$loss" && return
+    [[ $loss -lt $loss_max_limit ]] && INFO_LOG "Check Pass: insta:$insta_id, loss:$loss" && return
 
     old_ip=$ip
     GetAddressInfo $insta_id
