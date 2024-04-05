@@ -1,6 +1,10 @@
 #!/bin/bash
 
 if [ $1 == "awsl" ]; then
+	echo "setup aws-cli ..."
+	cd ./src/aws && ./init.sh
+	cd -
+	echo "finish!"
 	echo "setup aws-tool ..."
 	cd ./src/awsl && ./init.sh;
 	echo "finish!"
