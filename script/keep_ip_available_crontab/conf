@@ -4,5 +4,6 @@ launch_template_name="auto_ss"
 loss_max_limit="70"
 
 # nginx
-nginx_conf="/etc/nginx/ss_proxy.conf"
+nginx_conf="/data/project/dockerfiles/tools/nginx/conf.d/ss.conf"
+nginc_docker_name="my-nginx"
 

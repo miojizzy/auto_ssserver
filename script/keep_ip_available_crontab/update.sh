@@ -88,6 +88,12 @@ function ChangeNginx() {
     DEBUG_LOG "restart nginx: conf:$1, new:$2"
 }
 
+# param: nginx_conf newip nginx_docker_name
+function ChangeNginxDocker() {
+    sed -r "s/^( *server ).*(:2333;)$/\1$2\2/g" -i $1
+    docker exec -it $3 nginx -s reload 
+    DEBUG_LOG "restart nginx: conf:$1, new:$2, dk name:$3"
+}
 
 
 
@@ -101,7 +107,7 @@ function Create() {
 
     GetInstanceInfo
 
-    ChangeNginx $nginx_conf $ip
+    ChangeNginxDocker $nginx_conf $ip $nginx_docker_name
 
     INFO_LOG "Create VPS"
 }
@@ -140,7 +146,7 @@ function Check() {
     AllocateAddress $insta_id
     new_ip=$ip
 
-    ChangeNginx $nginx_conf $new_ip
+    ChangeNginxDocker $nginx_conf $new_ip $nginx_docker_name
 
     INFO_LOG "change ip address: loss:$loss, old:$old_ip, new:$new_ip"
 }
