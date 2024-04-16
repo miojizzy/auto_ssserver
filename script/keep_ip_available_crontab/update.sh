@@ -156,6 +156,7 @@ function Check() {
 
 
 alias aws="/usr/local/bin/aws"
+PATH=$PATH:/root/bin
 source $CONF
 
 case $1 in
