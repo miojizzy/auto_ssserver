@@ -5,5 +5,5 @@ loss_max_limit="70"
 
 # nginx
 nginx_conf="/data/project/dockerfiles/tools/nginx/conf.d/ss.conf"
-nginc_docker_name="my-nginx"
+nginx_docker_name="my-nginx"
 
