@@ -35,7 +35,7 @@ function ReleaseInstance() {
 
 # param: template_name 
 function AllocateInstance() {
-    ret=`aws ec2 run-instances --launch-template LaunchTemplateName=${1}`
+    ret=`aws ec2 run-instances --launch-template LaunchTemplateName=${1} --key-name="ap-northeast-1"`
     DEBUG_LOG "Allocate Address"
 }
 
@@ -146,7 +146,7 @@ function Check() {
     AllocateAddress $insta_id
     new_ip=$ip
 
-    ChangeNginxDocker $nginx_conf $new_ip $nginx_docker_name
+    ChangeNginxDocker $nginx_conf "$new_ip" $nginx_docker_name
 
     INFO_LOG "change ip address: loss:$loss, old:$old_ip, new:$new_ip"
 }

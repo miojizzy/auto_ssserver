@@ -22,8 +22,9 @@ def describe(vec):
 
 def run(vec):
     tp_name = vec[0]
-    data = commands.getoutput("aws ec2 run-instances --launch-template LaunchTemplateName=%s"%(tp_name))
+    data = commands.getoutput("aws ec2 run-instances --launch-template LaunchTemplateName=%s --key-name=\"%s\""%(tp_name, 'ap-northeast-1'))
     print("finish!")
+    print(data)
 
 def terminate(vec):
     ins_id = vec[0]

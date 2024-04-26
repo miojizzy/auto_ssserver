@@ -4,6 +4,6 @@ launch_template_name="auto_ss"
 loss_max_limit="70"
 
 # nginx
-nginx_conf="/data/project/dockerfiles/tools/nginx/conf.d/ss.conf"
+nginx_conf="/data/project/dockerfiles/tools/nginx/ss.conf"
 nginx_docker_name="my-nginx"
 
