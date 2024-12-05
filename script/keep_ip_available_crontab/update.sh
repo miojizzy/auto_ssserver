@@ -22,7 +22,7 @@ function GetInstanceInfo() {
     ip=`echo $ret|jq "[ .Reservations[] | select(.Instances[0].State.Name == \"running\") ][0].Instances[0].PublicIpAddress" -r`
     [[ $insta_id == "null" ]] && insta_id="";
     [[ $ip == "null" ]] && ip="";
-    DEBUG_LOG "insta_id: $insta_id"
+    DEBUG_LOG "insta_id: $insta_id, ip: $ip"
 }
 
 # param: insta_id
@@ -36,7 +36,7 @@ function ReleaseInstance() {
 # param: template_name 
 function AllocateInstance() {
     ret=`aws ec2 run-instances --launch-template LaunchTemplateName=${1} --key-name="ap-northeast-1"`
-    DEBUG_LOG "Allocate Address"
+    DEBUG_LOG "Allocate Instance"
 }
 
 
@@ -91,6 +91,7 @@ function ChangeNginx() {
 # param: nginx_conf newip nginx_docker_name
 function ChangeNginxDocker() {
     sed -r "s/^( *server ).*(:2333;)$/\1$2\2/g" -i $1
+    DEBUG_LOG "restart nginx: conf:$1, new:$2, dk name:$3"
     docker exec -it $3 nginx -s reload 
     DEBUG_LOG "restart nginx: conf:$1, new:$2, dk name:$3"
 }
@@ -105,9 +106,12 @@ function Create() {
     fi
     AllocateInstance $launch_template_name
 
-    GetInstanceInfo
+    while [[ $insta_id == "" || $ip == "" ]]; do
+        sleep 5 
+        GetInstanceInfo
+    done
 
-    ChangeNginxDocker $nginx_conf $ip $nginx_docker_name
+    ChangeNginxDocker $nginx_conf $ip "$nginx_docker_name"
 
     INFO_LOG "Create VPS"
 }
@@ -146,7 +150,7 @@ function Check() {
     AllocateAddress $insta_id
     new_ip=$ip
 
-    ChangeNginxDocker $nginx_conf "$new_ip" $nginx_docker_name
+    ChangeNginxDocker $nginx_conf "$new_ip" "$nginx_docker_name"
 
     INFO_LOG "change ip address: loss:$loss, old:$old_ip, new:$new_ip"
 }
