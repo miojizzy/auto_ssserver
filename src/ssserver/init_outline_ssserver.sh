@@ -13,9 +13,32 @@ echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.bashrc
 git clone -b v1.7.3 --depth=1 https://github.com/Jigsaw-Code/outline-ss-server.git
 
 
+# config
+echo >/data/outline_server_config.yml <<EOF
+services:
+  - listeners:
+      - type: tcp
+        address: "[::]:2333"
+      - type: udp
+        address: "[::]:2333"
+    keys:
+        - id: user-0
+          cipher: chacha20-ietf-poly1305
+          secret: 12345678
+  - listeners:
+      - type: tcp
+        address: "[::]:2334"
+      - type: udp
+        address: "[::]:2334"
+    keys:
+        - id: user-1
+          cipher: chacha20-ietf-poly1305
+          secret: 12345678
+EOF
+
 # start
 cd outline-ss-server
-nohup go run ./cmd/outline-ss-server -config cmd/outline-ss-server/config_example.yml -metrics localhost:9091 --replay_history=10000 > /var/log/outline_ssserver.log 2>&1 &
+nohup go run ./cmd/outline-ss-server -config /data/outline_server_config.yml -metrics localhost:9091 --replay_history=10000 > /var/log/outline_ssserver.log 2>&1 &
 
 
 sleep 2
