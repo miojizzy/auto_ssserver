@@ -1,11 +1,25 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import sys
-import commands
 import json
 
+if sys.version_info[0] < 3:
+    import commands
+else:
+    import subprocess
+
+
+
+# 使用 get_command_output 函数来获取命令输出
+def get_command_output(cmd):
+    if sys.version_info[0] < 3:
+        return commands.getoutput(cmd)
+    else:
+        return subprocess.check_output(cmd, shell=True).decode('utf-8')
+
+
 def describe(vec):
-    data = commands.getoutput("aws ec2 describe-instances")
+    data = get_command_output("aws ec2 describe-instances")
 
     data = json.loads(data)
     fmtstr = '{:20s} {:20s} {:20s} {:40s}'
@@ -22,13 +36,13 @@ def describe(vec):
 
 def run(vec):
     tp_name = vec[0]
-    data = commands.getoutput("aws ec2 run-instances --launch-template LaunchTemplateName=%s --key-name=\"%s\""%(tp_name, 'ap-northeast-1'))
+    data = get_command_output("aws ec2 run-instances --launch-template LaunchTemplateName=%s --key-name=\"%s\""%(tp_name, 'ap-northeast-1'))
     print("finish!")
     print(data)
 
 def terminate(vec):
     ins_id = vec[0]
-    data = commands.getoutput("aws ec2 terminate-instances --instance-ids %s"%(ins_id))
+    data = get_command_output("aws ec2 terminate-instances --instance-ids %s"%(ins_id))
     print(data)
 
 def help(vec):
