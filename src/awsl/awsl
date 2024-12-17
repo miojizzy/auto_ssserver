@@ -10,7 +10,7 @@ else:
 
 
 
-# 使用 get_command_output 函数来获取命令输出
+# use get_command_output to call shell command
 def get_command_output(cmd):
     if sys.version_info[0] < 3:
         return commands.getoutput(cmd)
