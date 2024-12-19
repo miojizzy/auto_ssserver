@@ -2,7 +2,7 @@
 
 mkdir /data
 cd /data
-echo > config.json <EOF
+cat > config.json <<EOF
 {"port_password": {"2333": "12345678", "2334": "12345678"}, "method": "aes-256-cfb", "timeout": 300, "server": "0.0.0.0"}
 EOF
 git clone https://github.com/miojizzy/auto_ssserver.git > git_log 2>&1

@@ -45,7 +45,7 @@ user_data = """#!/bin/bash
 
 mkdir /data
 cd /data
-echo > config.json <EOF
+cat > config.json <<EOF
 {}
 EOF
 git clone https://github.com/miojizzy/auto_ssserver.git > git_log 2>&1
