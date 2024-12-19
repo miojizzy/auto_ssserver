@@ -38,7 +38,7 @@ EOF
 
 # start
 cd outline-ss-server
-nohup go run ./cmd/outline-ss-server -config /data/outline_server_config.yml -metrics localhost:9091 --replay_history=10000 > /var/log/outline_ssserver.log 2>&1 &
+nohup go run ./cmd/outline-ss-server -config /data/outline_server_config.yml -metrics 0.0.0.0:9091 --replay_history=10000 > /var/log/outline_ssserver.log 2>&1 &
 
 
 sleep 2

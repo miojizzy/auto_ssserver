@@ -1,15 +1,37 @@
 #!/usr/bin/python
+
+import sys
 import json
-import commands
+from datetime import datetime
+
+if sys.version_info[0] < 3:
+    import commands
+else:
+    import subprocess
+
+
+
+# use get_command_output to call shell command
+def get_command_output(cmd):
+    if sys.version_info[0] < 3:
+        return commands.getoutput(cmd)
+    else:
+        return subprocess.check_output(cmd, shell=True).decode('utf-8')
+
 
 #### setup config
+datestr = datetime.now().strftime("%Y%m%d")
+SECURITY_GROUP_NAME = "auto_ss_sg_{}".format(datestr)
+LAUNCH_TEMPLATE_NAME = "auto_ss_{}".format(datestr)
+# app port
 PORT_PSWD_MAP = {
     2333: "12345678",
     2334: "12345678",
 }
+# infra port
+INFRA_PORT = []
 METHOD = "aes-256-cfb"
-SECURITY_GROUP_NAME = "auto_ss_sg"
-LAUNCH_TEMPLATE_NAME = "auto_ss"
+
 
 ##### format config data
 ss_json = {
@@ -21,9 +43,13 @@ ss_json = {
 
 user_data = """#!/bin/bash
 
-echo '{}' > /etc/shadowsocks.json
-git clone https://github.com/miojizzy/auto_ssserver.git > /tmp/init_log 2>&1
-cd auto_ssserver && ./setup.sh si 
+mkdir /data
+cd /data
+echo > config.json <EOF
+{}
+EOF
+git clone https://github.com/miojizzy/auto_ssserver.git > git_log 2>&1
+cd auto_ssserver && ./setup.sh osi 
 touch testfile
 """.format(json.dumps(ss_json))
 
@@ -36,10 +62,11 @@ def main():
     generate_lt()
 
 
+
 def generate_sg():
     data = {
-        "Description": "security group for auto ssserver",
-        "GroupName": SECURITY_GROUP_NAME
+        "GroupName": SECURITY_GROUP_NAME,
+        "Description": "auto ssserver"
     }
     with open ("conf/sg.json", "w") as f:
         f.write(json.dumps(data)+'\n')
@@ -47,39 +74,34 @@ def generate_sg():
         f.write(json.dumps({"GroupName": SECURITY_GROUP_NAME})+'\n')
 
 
-def generate_sgi():
-    data = {}
-    data["GroupName"] = SECURITY_GROUP_NAME
-    data["IpPermissions"] = []
-    # for ssh
-    data["IpPermissions"] = [{
-        "FromPort": 22, 
-        "ToPort": 22, 
-        "IpProtocol": "tcp", 
-        "IpRanges": [{"CidrIp": "0.0.0.0/0"}]
-        }]
-    with open("conf/sgi/sgi0.json", "w") as f:
-        f.write(json.dumps(data)+'\n')
-    # for ping
-    data["IpPermissions"] = [{
-        "FromPort": -1, 
-        "ToPort": -1, 
-        "IpProtocol": "icmp", 
-        "IpRanges": [{"CidrIp": "0.0.0.0/0"}]
-        }]
-    with open("conf/sgi/sgi1.json", "w") as f:
-        f.write(json.dumps(data)+'\n')
-    # for app
-    for i in range(len(PORT_PSWD_MAP)):
-        port = PORT_PSWD_MAP.keys()[i]
-        data["IpPermissions"] = [{
+
+def _genSGIData(sg_name, protocol, port):
+    return {
+        "GroupName": sg_name,
+        "IpPermissions":[{
             "FromPort": port, 
             "ToPort": port, 
-            "IpProtocol": "tcp", 
+            "IpProtocol": protocol, 
             "IpRanges": [{"CidrIp": "0.0.0.0/0"}]
-            }]
-        with open("conf/sgi/sgi%d.json"%(i+2), "w") as f:
-            f.write(json.dumps(data)+'\n')
+        }]
+    }
+
+def generate_sgi():
+    datas = []
+    # for ssh
+    datas.append(_genSGIData(SECURITY_GROUP_NAME, "tcp", 22))
+    # for ping
+    datas.append(_genSGIData(SECURITY_GROUP_NAME, "icmp", -1))
+    # for metric
+    datas.append(_genSGIData(SECURITY_GROUP_NAME, "tcp", 9091))
+    # app
+    for port in PORT_PSWD_MAP.keys():
+        datas.append(_genSGIData(SECURITY_GROUP_NAME, "tcp", port))
+        datas.append(_genSGIData(SECURITY_GROUP_NAME, "udp", port))
+
+    for i in range(len(datas)):
+        with open("conf/sgi/sgi%d.json"%(i), "w") as f:
+            f.write(json.dumps(datas[i])+'\n')
 
 
 def generate_ud():
@@ -95,7 +117,7 @@ def generate_lt():
         "ImageId": "ami-0fe22bffdec36361c",
         "InstanceType": "t2.nano",
         "SecurityGroups": [SECURITY_GROUP_NAME],
-        "UserData": commands.getoutput("cat conf/ud|base64")
+        "UserData":get_command_output("cat conf/ud|base64")
     }
     with open("conf/lt.json", "w") as f:                                                        
         f.write(json.dumps(data)+'\n')  

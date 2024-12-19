@@ -13,7 +13,7 @@ elif [ $1 == "aws" ]; then
 	cd ./src/aws && ./init.sh;
 	echo "finish!"
 
-elif [ $1 == "st" ]; then
+elif [ $1 == "launch_template" ]; then
 	echo "setup ssserver template..."
 	cd ./src/aws_launch_template && ./init_template.sh;
 	echo "finish!"
