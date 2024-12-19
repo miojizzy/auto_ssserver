@@ -8,14 +8,21 @@ cd /data
 wget https://go.dev/dl/go1.23.4.linux-amd64.tar.gz
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz
 
-echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
 
 export GOPATH=/root/go
 export GOMODCACHE=/root/.cache/go-build
+export GOCACHE=/root/.cache/go-build
 export PATH=$PATH:/usr/local/go/bin:/root/go/bin
 
 mkdir -p /root/.cache/go-build
 
+cat >> /root/.bashrc <<EOF
+
+export GOPATH=/root/go
+export GOMODCACHE=/root/.cache/go-build
+export GOCACHE=/root/.cache/go-build
+export PATH=$PATH:/usr/local/go/bin:/root/go/bin
+EOF
 
 
 # outline server
