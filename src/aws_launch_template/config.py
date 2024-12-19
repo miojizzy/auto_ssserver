@@ -48,7 +48,7 @@ cd /data
 cat > config.json <<EOF
 {}
 EOF
-git clone https://github.com/miojizzy/auto_ssserver.git > git_log 2>&1
+git clone -b develop https://github.com/miojizzy/auto_ssserver.git > git_log 2>&1
 cd auto_ssserver && ./setup.sh osi 
 touch testfile
 """.format(json.dumps(ss_json))
