@@ -7,8 +7,17 @@ cd /data
 # golang
 wget https://go.dev/dl/go1.23.4.linux-amd64.tar.gz
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz
+
+echo "path:$PATH"
 export PATH=$PATH:/usr/local/go/bin
+
+echo "path:$PATH"
 echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.bashrc
+
+echo "path:$PATH"
+PATH=$PATH:/usr/local/go/bin
+
+echo "path:$PATH"
 
 # outline server
 git clone -b v1.7.3 --depth=1 https://github.com/Jigsaw-Code/outline-ss-server.git
