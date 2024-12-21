@@ -1,1 +1,1 @@
-{"IpPermissions": [{"ToPort": 2334, "FromPort": 2334, "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "IpProtocol": "tcp"}], "GroupName": "auto_ss_sg_20241219"}
+{"IpPermissions": [{"ToPort": 2334, "FromPort": 2334, "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "IpProtocol": "tcp"}], "GroupName": "auto_ss_sg_20241221"}

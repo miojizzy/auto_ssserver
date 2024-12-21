@@ -27,6 +27,7 @@ LAUNCH_TEMPLATE_NAME = "auto_ss_{}".format(datestr)
 PORT_PSWD_MAP = {
     2333: "12345678",
     2334: "12345678",
+    2335: "12345678",
 }
 # infra port
 INFRA_PORT = []

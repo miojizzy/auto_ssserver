@@ -50,6 +50,15 @@ services:
         - id: user-1
           cipher: chacha20-ietf-poly1305
           secret: 12345678
+  - listeners:
+      - type: tcp
+        address: "[::]:2335"
+      - type: udp
+        address: "[::]:2335"
+    keys:
+        - id: user-1
+          cipher: chacha20
+          secret: 12345678
 EOF
 
 # start
