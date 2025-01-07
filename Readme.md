@@ -30,6 +30,17 @@ cd auto_ssserver
 
 run `./setup.sh aws` to install.
 
+run `aws configure` to quickly set credentials.
+
+example:
+AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Default region name [None]: us-west-2
+Default output format [None]: json
+
+Find in IAM => Security Credentials => Create Access Key
+https://us-east-1.console.aws.amazon.com/iam/home?region=ap-northeast-1#/security_credentials
+https://stackoverflow.com/questions/21440709/how-do-i-get-aws-access-key-id-for-amazon
 
 
 
