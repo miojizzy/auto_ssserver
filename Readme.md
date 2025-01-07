@@ -18,11 +18,43 @@ cd auto_ssserver
 - connect to ssserver with client
 - `awsl term ` -> stop server with instanceId
 
-# Tools
+
+
+
+# Setup Tools
+
+
+## aws-cli
+
+> install AWS-Cli
+
+run `./setup.sh aws` to install.
+
+
+
+
+## aws_launch_template
+
+> auto create an instance-launch-template for aws account
+
+*Notices*: Require aws-cli
+
+run `./setup.sh st` 
+
+default template name: auto_ss
+default port: 2333,2334
+default password: 12345678
+default method: aes-256-cfb 
+
+
+
 
 ## awsl
 
-> A simple tool on AWS CloudShell, aka awsl
+> A simple tool to use AWS-Cli with short name (aka awsl),
+> on machine installed AWS-Cli orAWS CloudShell
+
+*Notices*: Require aws-cli, an instance-launch-template 
 
 ### install 
 
@@ -68,12 +100,11 @@ run `./setup.sh awsl`
 > can provide all kinds of help except help. :)
     
 
----
 
 
 ## ssserver
 
-> to setup shadowsocket server automaticly
+> to setup shadowsocket server automaticly (pipy version)
 
 ### install
 
@@ -81,17 +112,25 @@ run `./setup.sh st`
 
 `./setup.sh si` is for script
 
-*Notice*:All configurations are build in template. 
-If you want to change config of ssserver, you need to modify `src/ssserver/config.py` and setup again. 
-If you don't know how to edit file, you'd better not to do this.
 
-### usage
 
-After 'setup st', you can use 'awsl' tool to run instance.
 
-default template name: `auto_ss`
-default port: 2333
-default password: 12345678
-default method: aes-256-cfb 
+## outline_server
+
+> to setup shadowsocket server automaticly (outline vpn version)
+
+### install
+
+run `./setup.sh osi`
+
+
+
+-----
+
+# Script Tools
+
+## keep_ip_available_crontab
+
+> crontab script, to create/terminate instance automaticaly, update ip auto
 
 

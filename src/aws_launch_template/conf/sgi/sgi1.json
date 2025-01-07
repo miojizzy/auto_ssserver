@@ -1,0 +1,1 @@
+{"IpPermissions": [{"ToPort": -1, "FromPort": -1, "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "IpProtocol": "icmp"}], "GroupName": "auto_ss_sg_20241221"}
